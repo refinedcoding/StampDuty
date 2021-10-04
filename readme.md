@@ -1,8 +1,8 @@
-// TODO-1: unit test
-// TODO-2: property use
-// TODO-3: property type
-// TODO-4: saving
-// TODO-5: first home buyer
+// TODO-1: unit test  
+// TODO-2: property use  
+// TODO-3: property type  
+// TODO-4: saving  
+// TODO-5: first home buyer  
 
 - https://www.domain.com.au/home-loans/calculators/
 - https://www.domain.com.au/home-loans/calculators/stamp-duty-calculator/
@@ -22,11 +22,6 @@
 ## Victoria First Home Buyer
 - https://www.sro.vic.gov.au/fhbduty
 
-# Drop
+# Abandon
 - https://conveyancing.com.au/articles/stamp-duty
 
-
-
-
-
-# StampDuty
