@@ -18,7 +18,7 @@ const FirstBuy = [
     [1, 1],
     [1, 1],
     [1, 1],
-    [1, 0.5],
+    [1, 1],
     [1, 1]
 ];
 
@@ -148,5 +148,11 @@ function calcStampDuty(propertyUse, state, propertyType, propertyValue, saving, 
     return Math.max(duty, rate[4]);
 }
 
-var duty = calcStampDuty(PropertyUse.LIVE, State.NSW, PropertyType.EXISTING, 1000000, 200000, true);
-console.log(duty);
+console.assert(1200 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.NEW, 100000, 200000, true));
+console.assert(3500 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 250000, 200000, false));
+console.assert(8000 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.LAND, 400000, 200000, true));
+console.assert(15720 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.NEW, 600000, 200000, false));
+console.assert(25150 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 800000, 200000, false));
+console.assert(36950 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.LAND, 1000000, 200000, true));
+console.assert(68100 === calcStampDuty(PropertyUse.INVEST, State.ACT, PropertyType.EXISTING, 1500000, 200000, false));
+console.log(calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 1500000, 200000, true));
