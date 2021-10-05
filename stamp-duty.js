@@ -148,6 +148,7 @@ function calcStampDuty(propertyUse, state, propertyType, propertyValue, saving, 
     return Math.max(duty, rate[4]);
 }
 
+// ACT
 console.assert(1200 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.NEW, 100000, 200000, true));
 console.assert(3500 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 250000, 200000, false));
 console.assert(8000 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.LAND, 400000, 200000, true));
@@ -155,4 +156,13 @@ console.assert(15720 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType
 console.assert(25150 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 800000, 200000, false));
 console.assert(36950 === calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.LAND, 1000000, 200000, true));
 console.assert(68100 === calcStampDuty(PropertyUse.INVEST, State.ACT, PropertyType.EXISTING, 1500000, 200000, false));
+
+// TODO-Test-NSW
+// TODO-Test-NT
+// TODO-Test-QLD
+// TODO-Test-SA
+// TODO-Test-TAS
+// TODO-Test-VIC
+// TODO-Test-WA
+// TODO-Test: https://www.domain.com.au/home-loans/calculators/stamp-duty-calculator/
 console.log(calcStampDuty(PropertyUse.LIVE, State.ACT, PropertyType.EXISTING, 1500000, 200000, true));
