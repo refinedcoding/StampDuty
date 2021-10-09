@@ -2155,7 +2155,6 @@ function match(a, b) {
 function calc(state, propertyUse, propertyType, propertyValue, saving, firstHomeBuyer, foreignBuyer, isMelbourne) {
     var states = data['stamp-duty-lib'].stampduty.state;
     var types = getRangeLookupList(propertyUse, propertyType, firstHomeBuyer, false, false);
-    console.log('Types: ' + types);
     var info = states[state];
     var mortgate = info.mortgageRegistrationFee;
     var title = info.titleSearchFee;
@@ -2216,11 +2215,26 @@ function calc(state, propertyUse, propertyType, propertyValue, saving, firstHome
             }
         }
     }
-
-    return { 'stampDuty': stamp, 'mortgage': mortgate, 'transfer': transfer, 'title':title, 'grant': grant, 'deposit': saving + grant - stamp - mortgate- transfer - title}
+    var deposit = saving + grant - stamp - mortgate- transfer - title;
+    return { 'stampDuty': stamp, 'mortgage': mortgate, 'transfer': transfer, 'title':title, 'grant': grant, 'deposit': deposit.toFixed(2) };
 }
 
 // TODO-test-array
+// [ 'primary-existing-fho', 'primary-existing', 'primary' ]
 console.log(getRangeLookupList('primary', 'existing', true, false, false));
+
+// { stampDuty: 0,
+//     mortgage: 147.7,
+//     transfer: 147.7,
+//     title: 15.1,
+//     grant: 10000,
+//     deposit: '209689.50' }
 console.log(calc('nsw', 'primary', 'new', 600000, 200000, true, false, false));
+
+// { stampDuty: 40207,
+//     mortgage: 147.7,
+//     transfer: 147.7,
+//     title: 15.1,
+//     grant: 0,
+//     deposit: '159482.50' }
 console.log(calc('nsw', 'primary', 'new', 1000000, 200000, true, false, false));
