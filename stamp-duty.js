@@ -47,7 +47,7 @@ const RateMapping = [
 
 var MAX = Number.MAX_VALUE;
 
-const Rate = [
+const STAMP = [
     [   // ACT
         [
             [     -1,  200000, 1.20,     0, 20],
@@ -88,14 +88,14 @@ const Rate = [
     ],
     [   // SA
         [
-            [-1,	    12000,	1,	0,	0],
-            [12000,	    30000,	2,	120,	0],
-            [30000,	    50000,	3,	480,	0],
+            [-1,	    12000,	1.0,	0,	0],
+            [12000,	    30000,	2.0,	120,	0],
+            [30000,	    50000,	3.0,	480,	0],
             [50000,	    100000,	3.5,	1080,	0],
-            [100000,	200000,	4,	2830,	0],
+            [100000,	200000,	4.0,	2830,	0],
             [200000,	250000,	4.25,	6830,	0],
             [250000,	300000,	4.75,	8955,	0],
-            [300000,	500000,	5,	11330,	0],
+            [300000,	500000,	5.0,	11330,	0],
             [500000,	MAX,	5.5,	21330,	0]
         ]
     ],
@@ -136,9 +136,73 @@ const Rate = [
     ]
 ];
 
+// SA Transfer Fee & Conveyancing
+// https://exactly.loans/calculate-sa-stamp-duty/
+
+const State = {
+    ACT:    0,
+    NSW:    1,
+    NT:     2,
+    QLD:    3,
+    SA:     4,
+    TAS:    5,
+    VIC:    6,
+    WA:     7
+};
+
+const MORTGAGE = [
+    0,
+    0,
+    0,
+    0,
+    173,
+    0,
+    0,
+    0
+];
+
+const TRANSFER = [
+    [],
+    [],
+    [],
+    [],
+    [   // SA
+        [   -1, 5000,   0,  173],
+        [5000,  20000,  0,  193],
+        [20000, 40000,  0,  212],
+        [40000,  MAX,   0.88,   212]
+    ],
+    [],
+    [],
+    []
+];
+
+const CONVEYANCE = [
+    0,
+    0,
+    0,
+    0,
+    1000,
+    0,
+    0,
+    0
+];
+
+// Mortgage Fee
+// Transfer Fee
+// Conveyancing
+// First Home Buyer Grant
+const MISC = [
+    [153, 409, 1000, 7000],
+    [146, 146, 1000, 10000],
+    [173, 149, 1000, 15000],
+    []
+];
+
+
 function calcStampDuty(propertyUse, state, propertyType, propertyValue, saving, firstHomeBuyer) {
     var rateIndex = RateMapping[state][propertyUse * 3 + propertyType];
-    var rates = Rate[state][rateIndex];
+    var rates = STAMP[state][rateIndex];
     var n = rates.length, i = 0;
     for ( ; i < n && rates[i][1] < propertyValue; i++) {
     }
