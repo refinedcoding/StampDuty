@@ -1,10 +1,18 @@
 
 # TODO
-// TODO-1: unit test  
-// TODO-2: property use  
-// TODO-3: property type  
-// TODO-4: saving  
-// TODO-5: first home buyer  
+// DONE-1: unit test  
+// DONE-2: property use  
+// DONE-3: property type  
+// DONE-4: saving  
+// DONE-5: first home buyer  
+// TODO-6: test ACT  
+// DONE-7: test NSW  
+// TODO-8: test NT  
+// TODO-9: test QLD  
+// TODO-10: test SA  
+// TODO-11: test TAS  
+// TODO-12: test VIC  
+// TODO-13: test WA  
 
 # Done
 - add primary/investment/land for Victoria

@@ -2134,14 +2134,31 @@ var getRangeLookupList = function (purpose, homeType, firstHomeOwner, foreignBuy
 };
 
 function match(a, b) {
+    var s = new Set();
     for (var i in a) {
-        for (var j in b) {
-            if (a[i] == b[j]) {
-                return true;
-            }
+        s.add(a[i]);
+    }
+    for (var i in b) {
+        if (s.has(b[i])) {
+            return true;
         }
     }
     return false;
+}
+
+function equal(a, b) {
+    for (var i in a) {
+        var x = a[i], y = b[i];
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    for (var i in b) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -2175,26 +2192,28 @@ function calc(state, propertyUse, propertyType, propertyValue, saving, firstHome
     }
 
     var grant = 0, look = true;
-    for (var i = 0; i < grants.length && look; i ++) {
-        var g = grants[i];
-        var grantTypes = g.type.split(',');
-        for (var j in grantTypes) {
-            grantTypes[i] = grantTypes[j].trim();
-        }
-        if (match(types, grantTypes)) {
-            var ranges = g.threshold;
-            for (var j = 0; j < ranges.length && look; j ++) {
-                var r = ranges[j];
-                if (r.rangeFrom <= propertyValue && propertyValue <= r.rangeTo) {
-                    grant = r.amount;
-                    look = false;
+    if ('grant' in info) {
+        for (var i = 0; i < grants.length && look; i++) {
+            var g = grants[i];
+            var grantTypes = g.type.split(',');
+            for (var j in grantTypes) {
+                grantTypes[i] = grantTypes[j].trim();
+            }
+            if (match(types, grantTypes)) {
+                var ranges = g.threshold;
+                for (var j = 0; j < ranges.length && look; j++) {
+                    var r = ranges[j];
+                    if (r.rangeFrom <= propertyValue && propertyValue <= r.rangeTo) {
+                        grant = r.amount;
+                        look = false;
+                    }
                 }
             }
         }
     }
 
     var stamp = 0, look = true;
-    for (var i = 0; i < stamps.length && look; i ++) {
+    for (var i = 0; i < stamps.length && look; i++) {
         var s = stamps[i];
         var stampTypes = s.type.split(',');
         for (var j in stampTypes) {
@@ -2202,7 +2221,7 @@ function calc(state, propertyUse, propertyType, propertyValue, saving, firstHome
         }
         if (match(types, stampTypes)) {
             var ranges = s.threshold;
-            for (var j = 0; j < ranges.length && look; j ++) {
+            for (var j = 0; j < ranges.length && look; j++) {
                 var r = ranges[j];
                 if (r.rangeFrom <= propertyValue && propertyValue <= r.rangeTo) {
                     stamp = r.fee;
@@ -2215,26 +2234,50 @@ function calc(state, propertyUse, propertyType, propertyValue, saving, firstHome
             }
         }
     }
-    var deposit = saving + grant - stamp - mortgate- transfer - title;
-    return { 'stampDuty': stamp, 'mortgage': mortgate, 'transfer': transfer, 'title':title, 'grant': grant, 'deposit': deposit.toFixed(2) };
+    var deposit = saving + grant - stamp - mortgate - transfer - title;
+    return {
+        'stampDuty': stamp,
+        'mortgage': mortgate,
+        'transfer': transfer,
+        'title': title,
+        'grant': grant,
+        'deposit': deposit.toFixed(2)
+    };
 }
 
-// TODO-test-array
-// [ 'primary-existing-fho', 'primary-existing', 'primary' ]
-console.log(getRangeLookupList('primary', 'existing', true, false, false));
+console.assert(equal(['primary-existing-fho', 'primary-existing', 'primary'], getRangeLookupList('primary', 'existing', true, false, false)));
 
-// { stampDuty: 0,
-//     mortgage: 147.7,
-//     transfer: 147.7,
-//     title: 15.1,
-//     grant: 10000,
-//     deposit: '209689.50' }
-console.log(calc('nsw', 'primary', 'new', 600000, 200000, true, false, false));
+console.assert(equal({ stampDuty: 0,
+    mortgage: 155,
+    transfer: 416,
+    title: 31,
+    grant: 0,
+    deposit: 398 }
+, calc('act', 'primary', 'new', 560000, 1000, true, false, false)));
 
-// { stampDuty: 40207,
-//     mortgage: 147.7,
-//     transfer: 147.7,
-//     title: 15.1,
-//     grant: 0,
-//     deposit: '159482.50' }
-console.log(calc('nsw', 'primary', 'new', 1000000, 200000, true, false, false));
+console.assert(equal({
+    stampDuty: 0,
+    mortgage: 147.7,
+    transfer: 147.7,
+    title: 15.1,
+    grant: 10000,
+    deposit: 209689.50
+}, calc('nsw', 'primary', 'new', 600000, 200000, true, false, false)));
+
+console.assert(equal({
+    stampDuty: 40207,
+    mortgage: 147.7,
+    transfer: 147.7,
+    title: 15.1,
+    grant: 0,
+    deposit: 159482.50
+}, calc('nsw', 'primary', 'new', 1000000, 200000, true, false, false)));
+
+console.assert(equal({
+    stampDuty: 0,
+    mortgage: 147.7,
+    transfer: 147.7,
+    title: 15.1,
+    grant: 10000,
+    deposit: 10189.50
+}, calc('nsw', 'primary', 'new', 560000, 500, true, false, false)));
